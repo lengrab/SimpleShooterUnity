@@ -3,17 +3,19 @@ using UnityEngine;
 
 [RequireComponent(typeof(Animator))]
 
-public abstract class EnemyAnimator : MonoBehaviour, IEnemyAnimate
+public class EnemyAnimator : MonoBehaviour, IEnemyAnimate
 {
     private Animator _animator;
 
     private static readonly int IsRunHash = Animator.StringToHash("IsRun");
-    private static readonly int RunSpeedHash = Animator.StringToHash("RunSpeed");
+    private static readonly int RunSpeedHash = Animator.StringToHash("Blend");
     private static readonly int SimpleAttackHash = Animator.StringToHash("SimpleAttack");
     private static readonly int PowerAttackHash = Animator.StringToHash("PowerAttack");
     private static readonly int HitDamageHash = Animator.StringToHash("HitDamage");
     private static readonly int IsDeadHash = Animator.StringToHash("IsDead");
-    
+
+    public float AnimationSpeed { get; set; }
+
     #region Animations
 
     public void Idle()
@@ -25,7 +27,8 @@ public abstract class EnemyAnimator : MonoBehaviour, IEnemyAnimate
 
     public void Run(float speedAnimation)
     {
-        _animator.SetFloat(RunSpeedHash,speedAnimation);   
+        _animator.SetFloat(RunSpeedHash,speedAnimation);
+        _animator.speed = AnimationSpeed;
         _animator.SetBool(IsRunHash, true);   
     }
 
@@ -46,7 +49,7 @@ public abstract class EnemyAnimator : MonoBehaviour, IEnemyAnimate
 
     public void Dead()
     {
-        _animator.SetBool(IsDeadHash, true);   
+        _animator.SetTrigger(IsDeadHash);   
     }
     #endregion
     
